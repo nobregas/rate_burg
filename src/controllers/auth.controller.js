@@ -4,8 +4,9 @@ import { BadRequest } from '../exceptions/BadRequest.js'
 import { InternalException } from '../exceptions/internalException.js'
 import { NotFoundException } from '../exceptions/NotFoundException.js'
 import bcrypt, { compareSync } from "bcrypt"
+import { JWT_SECRET } from '../secrets.js'
 import User from '../models/user.model.js'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 class AuthController {
 
@@ -45,12 +46,18 @@ class AuthController {
         let user = await User.findOne({ email })
 
         if (!user) throw new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND, null)
-        if (!compareSync(password, user.password)) throw new BadRequest("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)
+        if (!compareSync(password, user.password)) throw new BadRequest("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)        
         
-        const token = jwt.sign({ id: user.id }, JWT_SECRET)
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, {
+                expiresIn: 86400
+        })
 
         res.json({
-            user, 
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }, 
             token   
         })
     }
