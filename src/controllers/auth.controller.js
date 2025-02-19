@@ -56,8 +56,7 @@ class AuthController {
     }
 
     current = async (req, res, next) => {
-
-
+        res.json(req.user)
     }
 }
 
