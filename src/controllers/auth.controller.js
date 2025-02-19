@@ -1,7 +1,7 @@
 import { ErrorCodes } from '../enums/errorcodes.js'
 import { httpStatus } from '../enums/httpstatus.js'
 import { BadRequest } from '../exceptions/BadRequest.js'
-import { InternalServerError } from '../exceptions/InternalServerError.js'
+import { InternalException } from '../exceptions/internalException.js'
 import { NotFoundException } from '../exceptions/NotFoundException.js'
 import bcrypt, { compareSync } from "bcrypt"
 import User from '../models/user.model.js'
@@ -19,11 +19,11 @@ class AuthController {
         let user = await User.findOne({ email })
         if (user) throw new BadRequest("2002 - User already exists", ErrorCodes.USER_EXISTS, null)
 
-        const hashedPassaword = await bcrypt.hash(password, 10)
+        const hashedPassword = await bcrypt.hash(password, 10)
         user = await User.create({
             name,
             email,
-            password: hashedPassaword
+            password: hashedPassword
         })
 
         if (user) {
@@ -36,7 +36,7 @@ class AuthController {
             res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
                 message: "5001 - Something went wrong"
             })
-            throw new InternalServerError("5001 - Something went wrong", ErrorCodes.SOMETHING_WENT_WRONG, null)
+            throw new InternalException("5001 - Something went wrong", ErrorCodes.SOMETHING_WENT_WRONG, null)
         }
     }
 
