@@ -52,7 +52,7 @@ class AuthController {
         const token = jwt.sign({ id: user.id }, JWT_SECRET, {
                 expiresIn: 86400
         })
-
+        
         res.json({
             user: {
                 id: user.id,

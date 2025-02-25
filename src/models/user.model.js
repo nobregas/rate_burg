@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ErrorCodes } from "../enums/errorcodes.js";
+import { Roles } from "../enums/roles.js";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -14,6 +15,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, ErrorCodes.PASSWORD_REQUIRED]
+    },
+    role: {
+        default: Roles.USER,
+        type: String
     },
     image: {
         type: String
