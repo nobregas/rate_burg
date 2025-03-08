@@ -1,5 +1,5 @@
 import { ErrorCodes } from "../enums/index.js";
-import { UnauthorizedException } from "../exceptions/UnauthorizedException";
+import { UnauthorizedException } from '../exceptions/UnauthorizedException.js'
 
 const roleMiddleware = (role) => {
     return (req, res, next) => {
@@ -9,3 +9,5 @@ const roleMiddleware = (role) => {
         next();
     }
 };
+
+export default roleMiddleware;

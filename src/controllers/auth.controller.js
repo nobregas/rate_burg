@@ -1,8 +1,8 @@
 import { ErrorCodes, HttpStatus } from "../enums/index.js"
-import { BadRequest } from '../exceptions/BadRequest.js'
-import { InternalException } from '../exceptions/internalException.js'
-import { NotFoundException } from '../exceptions/NotFoundException.js'
-import { UnauthorizedException } from '../exceptions/UnauthorizedException.js'
+import { BadRequest } from '../exceptions/BadRequest.js';
+import { NotFoundException } from '../exceptions/NotFoundException.js';
+import { UnauthorizedException } from '../exceptions/UnauthorizedException.js';
+import { InternalException } from '../exceptions/internalException.js';
 import bcrypt, { compareSync } from "bcrypt"
 import { JWT_SECRET, TOKEN_DURATION } from '../secrets.js'
 import User from '../models/user.model.js'

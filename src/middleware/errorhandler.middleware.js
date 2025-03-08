@@ -3,7 +3,7 @@ import { HttpStatus, ErrorCodes } from "../enums/index.js";
 import { InternalException, ValidationException } from "../exceptions/internalException.js";
 import mongoose from 'mongoose';
 
-export const errorHandler = (method) => {
+const errorHandler = (method) => {
     return async (req, res, next) => {
         try {
             await method(req, res, next);
@@ -25,3 +25,5 @@ export const errorHandler = (method) => {
         }
     };
 };
+
+export default errorHandler;

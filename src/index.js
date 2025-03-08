@@ -2,7 +2,7 @@ import express from "express"
 import { dbConnection } from "./config/dbConnetion.js"
 import { PORT } from "../src/secrets.js"
 import router from "./routes/routes.js"
-import { errorMiddleWare } from "./middleware/errors.js"
+import { errorMiddleWare } from "./middleware/index.js"
 
 dbConnection()
 const app = express()

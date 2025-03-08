@@ -1,8 +1,8 @@
 import { ErrorCodes, HttpStatus, Roles } from "../enums/index.js";
 import Rating from "../models/rating.model.js";
 import Restaurant from "../models/restaurant.model.js";
-import NotFoundException from "../exceptions/NotFoundException.js";
-import BadRequest from "../exceptions/BadRequest.js";
+import { NotFoundException } from "../exceptions/NotFoundException.js";
+import { BadRequest } from "../exceptions/BadRequest.js";
 
 class RatingController {
 
@@ -34,7 +34,7 @@ class RatingController {
 
         const newRating = await Rating.create({ user: userId, restaurant: restaurantId, rating, comment });
         restaurant.ratings.push(newRating._id);
-        
+
         // atualiza media do restaurante
         const ratings = await Rating.find({ restaurant: restaurantId });
         restaurant.averageRating = ratings.reduce((acc, curr) => acc + curr.rating, 0) / ratings.length;
@@ -55,12 +55,12 @@ class RatingController {
         }
 
         await Rating.findByIdAndDelete(req.params.ratingId);
-        
+
         // atualiza media do restaurante
         const restaurant = await Restaurant.findById(rating.restaurant);
         restaurant.ratings.pull(rating._id);
         const ratings = await Rating.find({ restaurant: restaurant._id });
-        restaurant.averageRating = ratings.length > 0 ? 
+        restaurant.averageRating = ratings.length > 0 ?
             ratings.reduce((acc, curr) => acc + curr.rating, 0) / ratings.length : 0;
         await restaurant.save();
 

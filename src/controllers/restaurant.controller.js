@@ -2,8 +2,8 @@ import { ErrorCodes, HttpStatus } from "../enums/index.js"
 import Location from "../models/location.model.js"
 import Restaurant from "../models/restaurant.model.js"
 import Rating from "../models/rating.model.js"
-import BadRequest from "../exceptions/BadRequest.js"
-import NotFoundException from "../exceptions/NotFoundException.js"
+import { BadRequest } from "../exceptions/BadRequest.js"
+import { NotFoundException } from "../exceptions/NotFoundException.js"
 
 class RestaurantController {
     // only admin
@@ -63,7 +63,7 @@ class RestaurantController {
     update = async (req, res) => {
         const { name, image, location } = req.body;
         const restaurant = await Restaurant.findById(req.params.id);
-        
+
         if (!restaurant) {
             throw new NotFoundException("4007 - Restaurant not found", ErrorCodes.RESTAURANT_NOT_FOUND);
         }

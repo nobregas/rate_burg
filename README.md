@@ -6,3 +6,6 @@ TODO:
     - test crud
     - graphql for ratings
     - move error messages for enum.
+    - health endpoint
+    - logger
+    - pagination
