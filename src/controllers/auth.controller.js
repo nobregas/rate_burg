@@ -5,7 +5,7 @@ import { InternalException } from '../exceptions/internalException.js'
 import { NotFoundException } from '../exceptions/NotFoundException.js'
 import { UnauthorizedException } from '../exceptions/UnauthorizedException.js'
 import bcrypt, { compareSync } from "bcrypt"
-import { JWT_SECRET } from '../secrets.js'
+import { JWT_SECRET, TOKEN_DURATION } from '../secrets.js'
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
 
@@ -50,7 +50,7 @@ class AuthController {
         if (!compareSync(password, user.password)) throw new UnauthorizedException("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)        
         
         const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-                expiresIn: 86400
+                expiresIn: TOKEN_DURATION
         })
         
         res.json({
