@@ -1,5 +1,5 @@
 import HttpException from "../exceptions/root.js";
-import { HttpStatus, ErrorCodes } from "../enums/index.js";
+import { HttpStatus, ErrorCodes, ErrorMessages } from "../enums/index.js";
 import { InternalException, ValidationException } from "../exceptions/internalException.js";
 import mongoose from 'mongoose';
 
@@ -11,14 +11,22 @@ const errorHandler = (method) => {
             let exception;
             
             if (err instanceof mongoose.Error.ValidationError) {
-                exception = new ValidationException(err.message, err.errors, ErrorCodes.VALIDATION_ERROR);
+                exception = new ValidationException(
+                    ErrorMessages.VALIDATION_ERROR, 
+                    ErrorCodes.VALIDATION_ERROR,     
+                    err.errors                       
+                );
             } 
             else if (err instanceof HttpException) {
                 exception = err;
             } 
             else {
-                console.error("Error unsolved:", err);
-                exception = new InternalException("Intern Exception", err, HttpStatus.INTERNAL_SERVER_ERROR);
+                console.error("Unhandled error:", err);
+                exception = new InternalException(
+                    ErrorMessages.SOMETHING_WENT_WRONG, 
+                    ErrorCodes.SOMETHING_WENT_WRONG,    
+                    err                                 
+                );
             }
             
             next(exception);

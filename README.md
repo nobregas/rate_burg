@@ -3,9 +3,7 @@ TODO:
     - logout
     - swagger 
     - .env checker
-    - test crud
     - graphql for ratings
-    - move error messages for enum.
     - health endpoint
     - logger
     - pagination

@@ -1,4 +1,4 @@
-import { ErrorCodes, HttpStatus } from "../enums/index.js"
+import { ErrorCodes, ErrorMessages, HttpStatus } from "../enums/index.js"
 import Location from "../models/location.model.js"
 import Restaurant from "../models/restaurant.model.js"
 import Rating from "../models/rating.model.js"
@@ -11,7 +11,7 @@ class RestaurantController {
         const { name, image, location } = req.body
 
         if (!name || !location) {
-            throw new BadRequest("2001 - All fields are mandatory", ErrorCodes.MISSING_FIELDS, null)
+            throw new BadRequest(ErrorMessages.MISSING_FIELDS, ErrorCodes.MISSING_FIELDS, null)
         }
 
         const newLocation = await Location.create(location)
@@ -37,7 +37,7 @@ class RestaurantController {
             })
 
         if (!restaurant) {
-            throw new NotFoundException("4007 - Restaurant not found", ErrorCodes.USER_NOT_FOUND, null)
+            throw new NotFoundException(ErrorMessages.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND, null)
         }
         res.json(restaurant)
     }
@@ -65,7 +65,7 @@ class RestaurantController {
         const restaurant = await Restaurant.findById(req.params.id);
 
         if (!restaurant) {
-            throw new NotFoundException("4007 - Restaurant not found", ErrorCodes.RESTAURANT_NOT_FOUND);
+            throw new NotFoundException(ErrorMessages.RESTAURANT_NOT_FOUND, ErrorCodes.RESTAURANT_NOT_FOUND);
         }
 
         if (location) {
@@ -82,7 +82,7 @@ class RestaurantController {
     delete = async (req, res) => {
         const restaurant = await Restaurant.findByIdAndDelete(req.params.id);
         if (!restaurant) {
-            throw new NotFoundException("4007 - Restaurant not found", ErrorCodes.RESTAURANT_NOT_FOUND);
+            throw new NotFoundException(ErrorMessages.RESTAURANT_NOT_FOUND, ErrorCodes.RESTAURANT_NOT_FOUND);
         }
 
         await Location.findByIdAndDelete(restaurant.location);

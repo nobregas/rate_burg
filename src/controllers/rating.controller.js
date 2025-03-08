@@ -1,4 +1,4 @@
-import { ErrorCodes, HttpStatus, Roles } from "../enums/index.js";
+import { ErrorCodes, HttpStatus, Roles, ErrorMessages } from "../enums/index.js";
 import Rating from "../models/rating.model.js";
 import Restaurant from "../models/restaurant.model.js";
 import { NotFoundException } from "../exceptions/NotFoundException.js";
@@ -24,12 +24,12 @@ class RatingController {
 
         const restaurant = await Restaurant.findById(restaurantId);
         if (!restaurant) {
-            throw new NotFoundException("4007 - Restaurant not found", ErrorCodes.RESTAURANT_NOT_FOUND);
+            throw new NotFoundException(ErrorMessages.RESTAURANT_NOT_FOUND, ErrorCodes.RESTAURANT_NOT_FOUND);
         }
 
         const existingRating = await Rating.findOne({ user: userId, restaurant: restaurantId });
         if (existingRating) {
-            throw new BadRequest("4008 - User already rated this restaurant", ErrorCodes.DUPLICATE_RATING);
+            throw new BadRequest(ErrorMessages.DUPLICATE_RATING, ErrorCodes.DUPLICATE_RATING);
         }
 
         const newRating = await Rating.create({ user: userId, restaurant: restaurantId, rating, comment });
@@ -47,11 +47,11 @@ class RatingController {
     deleteUserRating = async (req, res) => {
         const rating = await Rating.findById(req.params.ratingId);
         if (!rating) {
-            throw new NotFoundException("4009 - Rating not found", ErrorCodes.RATING_NOT_FOUND);
+            throw new NotFoundException(ErrorMessages.RATING_NOT_FOUND, ErrorCodes.RATING_NOT_FOUND);
         }
 
         if (rating.user.toString() !== req.user.id && req.user.role !== Roles.ADMIN) {
-            throw new UnauthorizedException("4005 - Forbidden", ErrorCodes.FORBIDDEN);
+            throw new UnauthorizedException(ErrorMessages.FORBIDDEN, ErrorCodes.FORBIDDEN);
         }
 
         await Rating.findByIdAndDelete(req.params.ratingId);

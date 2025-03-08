@@ -1,4 +1,4 @@
-import { ErrorCodes, HttpStatus } from "../enums/index.js"
+import { ErrorCodes, HttpStatus, ErrorMessages } from "../enums/index.js"
 import { BadRequest } from '../exceptions/BadRequest.js';
 import { NotFoundException } from '../exceptions/NotFoundException.js';
 import { UnauthorizedException } from '../exceptions/UnauthorizedException.js';
@@ -14,11 +14,11 @@ class AuthController {
         const { name, email, password } = req.body
 
         if (!name || !email || !password) {
-            throw new BadRequest("2001 - All fields are mandatory",  null, ErrorCodes.MISSING_FIELDS,)
+            throw new BadRequest(ErrorMessages.MISSING_FIELDS, null, ErrorCodes.MISSING_FIELDS,)
         }
 
         let user = await User.findOne({ email })
-        if (user) throw new BadRequest("2002 - User already exists",  null, ErrorCodes.USER_EXISTS,)
+        if (user) throw new BadRequest(ErrorMessages.USER_EXISTS, null, ErrorCodes.USER_EXISTS,)
 
         const hashedPassword = await bcrypt.hash(password, 10)
         user = await User.create({
@@ -35,9 +35,9 @@ class AuthController {
             })
         } else {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                message: "5001 - Something went wrong"
+                message: ErrorMessages.SOMETHING_WENT_WRONG
             })
-            throw new InternalException("5001 - Something went wrong", ErrorCodes.SOMETHING_WENT_WRONG, null)
+            throw new InternalException(ErrorMessages.SOMETHING_WENT_WRONG, ErrorCodes.SOMETHING_WENT_WRONG, null)
         }
     }
 
@@ -45,8 +45,8 @@ class AuthController {
         const { email, password } = req.body
         let user = await User.findOne({ email })
 
-        if (!user) throw new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND, null)
-        if (!compareSync(password, user.password)) throw new UnauthorizedException("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)
+        if (!user) throw new NotFoundException(ErrorMessages.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND, null)
+        if (!compareSync(password, user.password)) throw new UnauthorizedException(ErrorMessages.INVALID_CREDENTIALS, ErrorCodes.INVALID_CREDENTIALS, null)
 
         const token = jwt.sign({ id: user.id }, JWT_SECRET, {
             expiresIn: TOKEN_DURATION
