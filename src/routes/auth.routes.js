@@ -4,8 +4,10 @@ import { authMiddleware, errorHandler, rateLimiter } from "../middleware/index.j
 
 const authRouter = Router();
 
-authRouter.post("/login", rateLimiter, errorHandler(AuthController.login ));
-authRouter.post("/register", rateLimiter, errorHandler(AuthController.register));
-authRouter.get("/current",rateLimiter, [authMiddleware], errorHandler(AuthController.current));
+const ATTEMPTS = 5
+
+authRouter.post("/login", rateLimiter(ATTEMPTS), errorHandler(AuthController.login ));
+authRouter.post("/register", rateLimiter(ATTEMPTS), errorHandler(AuthController.register));
+authRouter.get("/current",rateLimiter(ATTEMPTS), [authMiddleware], errorHandler(AuthController.current));
 
 export default authRouter;
