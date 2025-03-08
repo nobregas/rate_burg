@@ -27,6 +27,11 @@ export const ErrorCodes = {
     INVALID_CREDENTIALS: 4004,
     FORBIDDEN: 4005,
     VALIDATION_ERROR: 4006,
-    RESTAURANT_NOT_FOUND: 4007
+    RESTAURANT_NOT_FOUND: 4007,
+    DUPLICATE_RATING: 4008,
+    RATING_NOT_FOUND: 4009
 }
 
+export const ErrorMessages = {
+
+}
