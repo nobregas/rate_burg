@@ -1,3 +1,8 @@
+export const Roles = {
+    ADMIN: 'admin',
+    USER: 'user'
+}
+
 export const HttpStatus = {
     OK: 200,
     CREATED: 201,
@@ -21,10 +26,7 @@ export const ErrorCodes = {
     USER_NOT_FOUND: 4003,
     INVALID_CREDENTIALS: 4004,
     FORBIDDEN: 4005,
-    VALIDATION_ERROR: 4006
+    VALIDATION_ERROR: 4006,
+    RESTAURANT_NOT_FOUND: 4007
 }
 
-export const Roles = {
-    ADMIN: 'admin',
-    USER: 'user'
-}
