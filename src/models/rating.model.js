@@ -11,12 +11,12 @@ const ratingSchema = new mongoose.Schema({
         ref: "Restaurant",
         required: [true, "Restaurant is required"]
     },
-    rating: [{
+    rating: {
         type: Number,
         min: 0,
         max: 5,
         required: [true, "Rating is required"]
-    }],
+    },
     comment: {
         type: String,
         required: false
