@@ -1,5 +1,4 @@
-import { ErrorCodes } from '../enums/errorcodes.js'
-import { httpStatus } from '../enums/httpstatus.js'
+import { ErrorCodes, HttpStatus } from "../enums/index.js"
 import { BadRequest } from '../exceptions/BadRequest.js'
 import { InternalException } from '../exceptions/internalException.js'
 import { NotFoundException } from '../exceptions/NotFoundException.js'
@@ -29,13 +28,13 @@ class AuthController {
         })
 
         if (user) {
-            res.status(httpStatus.CREATED).json({
+            res.status(HttpStatus.CREATED).json({
                 id: user.id,
                 name: user.name,
                 email: user.email
             })
         } else {
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 message: "5001 - Something went wrong"
             })
             throw new InternalException("5001 - Something went wrong", ErrorCodes.SOMETHING_WENT_WRONG, null)
@@ -47,19 +46,19 @@ class AuthController {
         let user = await User.findOne({ email })
 
         if (!user) throw new NotFoundException("User not found", ErrorCodes.USER_NOT_FOUND, null)
-        if (!compareSync(password, user.password)) throw new UnauthorizedException("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)        
-        
+        if (!compareSync(password, user.password)) throw new UnauthorizedException("Invalid credentials", ErrorCodes.INVALID_CREDENTIALS, null)
+
         const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-                expiresIn: TOKEN_DURATION
+            expiresIn: TOKEN_DURATION
         })
-        
+
         res.json({
             user: {
                 id: user.id,
                 name: user.name,
                 email: user.email
-            }, 
-            token   
+            },
+            token
         })
     }
 

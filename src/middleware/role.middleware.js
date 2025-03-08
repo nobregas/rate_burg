@@ -1,4 +1,4 @@
-import { ErrorCodes } from "../enums/errorcodes";
+import { ErrorCodes } from "../enums/index.js";
 import { UnauthorizedException } from "../exceptions/UnauthorizedException";
 
 const roleMiddleware = (role) => {

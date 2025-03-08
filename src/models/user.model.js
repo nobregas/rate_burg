@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { ErrorCodes } from "../enums/errorcodes.js";
-import { Roles } from "../enums/roles.js";
+import { ErrorCodes, Roles } from "../enums/index.js";
 
 const userSchema = new mongoose.Schema({
     name: {

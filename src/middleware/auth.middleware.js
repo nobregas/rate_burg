@@ -1,4 +1,4 @@
-import { ErrorCodes } from "../enums/errorcodes.js";
+import { ErrorCodes } from "../enums/index.js";
 import { UnauthorizedException } from "../exceptions/UnauthorizedException.js";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../secrets.js";

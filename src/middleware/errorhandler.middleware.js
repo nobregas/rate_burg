@@ -1,7 +1,6 @@
 import HttpException from "../exceptions/root.js";
-import { httpStatus } from "../enums/httpstatus.js";
+import { HttpStatus, ErrorCodes } from "../enums/index.js";
 import { InternalException, ValidationException } from "../exceptions/internalException.js";
-import { ErrorCodes } from "../enums/errorcodes.js";
 import mongoose from 'mongoose';
 
 export const errorHandler = (method) => {
@@ -19,7 +18,7 @@ export const errorHandler = (method) => {
             } 
             else {
                 console.error("Error unsolved:", err);
-                exception = new InternalException("Intern Exception", err, httpStatus.INTERNAL_SERVER_ERROR);
+                exception = new InternalException("Intern Exception", err, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             
             next(exception);
