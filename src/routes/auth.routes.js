@@ -5,8 +5,8 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 
-authRouter.post("/login", errorHandler(AuthController.login ));
-authRouter.post("/register", errorHandler(AuthController.register));
-authRouter.get("/current",[authMiddleware], errorHandler(AuthController.current));
+authRouter.post("/login", rateLimiter, errorHandler(AuthController.login ));
+authRouter.post("/register", rateLimiter, errorHandler(AuthController.register));
+authRouter.get("/current",rateLimiter, [authMiddleware], errorHandler(AuthController.current));
 
 export default authRouter;
