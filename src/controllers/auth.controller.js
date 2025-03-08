@@ -4,7 +4,7 @@ import { NotFoundException } from '../exceptions/NotFoundException.js';
 import { UnauthorizedException } from '../exceptions/UnauthorizedException.js';
 import { InternalException } from '../exceptions/internalException.js';
 import bcrypt, { compareSync } from "bcrypt"
-import { JWT_SECRET, TOKEN_DURATION } from '../secrets.js'
+import { JWT_SECRET, TOKEN_DURATION, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_DURATION } from '../secrets.js'
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
 
