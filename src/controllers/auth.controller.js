@@ -42,15 +42,18 @@ class AuthController {
     }
 
     login = async (req, res, next) => {
-        const { email, password } = req.body
-        let user = await User.findOne({ email })
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
 
-        if (!user) throw new NotFoundException(ErrorMessages.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND, null)
-        if (!compareSync(password, user.password)) throw new UnauthorizedException(ErrorMessages.INVALID_CREDENTIALS, ErrorCodes.INVALID_CREDENTIALS, null)
+        if (!user) throw new NotFoundException(ErrorMessages.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND, null);
+        if (!compareSync(password, user.password)) throw new UnauthorizedException(ErrorMessages.INVALID_CREDENTIALS, ErrorCodes.INVALID_CREDENTIALS, null);
 
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-            expiresIn: TOKEN_DURATION
-        })
+        // tokens
+        const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: TOKEN_DURATION });
+        const refreshToken = jwt.sign({ id: user.id }, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_DURATION });
+
+        user.refreshToken = refreshToken;
+        await user.save();
 
         res.json({
             user: {
@@ -58,13 +61,43 @@ class AuthController {
                 name: user.name,
                 email: user.email
             },
-            token
-        })
+            accessToken,
+            refreshToken
+        });
     }
 
     current = async (req, res, next) => {
         res.json(req.user)
     }
+
+    refreshToken = async (req, res, next) => {
+        const { refreshToken } = req.body;
+        if (!refreshToken) throw new BadRequest(ErrorMessages.MISSING_FIELDS, ErrorCodes.MISSING_FIELDS, null);
+
+        try {
+            const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+            const user = await User.findById(payload.id);
+
+            if (!user || user.refreshToken !== refreshToken) {
+                throw new UnauthorizedException(ErrorMessages.INVALID_TOKEN, ErrorCodes.INVALID_TOKEN, null);
+            }
+
+            const newAccessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: TOKEN_DURATION });
+            
+            res.json({
+                accessToken: newAccessToken
+            });
+        } catch (err) {
+            throw new UnauthorizedException(ErrorMessages.INVALID_TOKEN, ErrorCodes.INVALID_TOKEN, null);
+        }
+    }
+
+    logout = async (req, res, next) => {
+        const userId = req.user.id;
+        await User.findByIdAndUpdate(userId, { refreshToken: null });
+        res.status(HttpStatus.NO_CONTENT).send();
+    }
+
 }
 
 export default new AuthController()
