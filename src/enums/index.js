@@ -12,6 +12,7 @@ export const HttpStatus = {
     UNAUTHORIZED: 401,
     FORBIDDEN: 403,
     INTERNAL_SERVER_ERROR: 500,
+    TOO_MANY_REQUESTS: 429
 }
 
 export const ErrorCodes = {
@@ -29,7 +30,8 @@ export const ErrorCodes = {
     VALIDATION_ERROR: 4006,
     RESTAURANT_NOT_FOUND: 4007,
     DUPLICATE_RATING: 4008,
-    RATING_NOT_FOUND: 4009
+    RATING_NOT_FOUND: 4009,
+    RATE_LIMIT_EXCEEDED: 5001
 }
 
 export const ErrorMessages = {
