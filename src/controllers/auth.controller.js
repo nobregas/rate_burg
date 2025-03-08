@@ -14,11 +14,11 @@ class AuthController {
         const { name, email, password } = req.body
 
         if (!name || !email || !password) {
-            throw new BadRequest("2001 - All fields are mandatory", ErrorCodes.MISSING_FIELDS, null)
+            throw new BadRequest("2001 - All fields are mandatory",  null, ErrorCodes.MISSING_FIELDS,)
         }
 
         let user = await User.findOne({ email })
-        if (user) throw new BadRequest("2002 - User already exists", ErrorCodes.USER_EXISTS, null)
+        if (user) throw new BadRequest("2002 - User already exists",  null, ErrorCodes.USER_EXISTS,)
 
         const hashedPassword = await bcrypt.hash(password, 10)
         user = await User.create({
