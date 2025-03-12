@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 const RestaurantSchema = new mongoose.Schema({
     name: String,
     image: String,
+    averageRating: Number,
     location: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Location',
