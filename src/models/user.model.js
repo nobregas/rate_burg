@@ -25,7 +25,11 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
         default: null
-    }
+    },
+    favoriteRestaurants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant'
+    }]
 }, {
     timestamps: true
 });

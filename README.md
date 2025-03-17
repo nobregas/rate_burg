@@ -5,8 +5,11 @@ TODO:
     - logger
     - pagination
 
-    // ex of graphql req
 
+  - refatorar em outro projeto o graphql
+
+
+    // ex of graphql req
 query {
   getRatingsByRestaurant(restaurantId: "67cc70e5758e78b39ae18cf8") {
     rating

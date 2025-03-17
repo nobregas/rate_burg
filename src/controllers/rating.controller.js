@@ -67,6 +67,59 @@ class RatingController {
         res.status(HttpStatus.NO_CONTENT).send();
     }
 
+    getFavorites = async (req, res) => {
+        const user = await User.findById(req.user.id)
+            .populate({
+                path: 'favoriteRestaurants',
+                populate: {
+                    path: 'location',
+                    model: 'Location'
+                }
+            });
+
+        if (!user) throw new NotFoundException(ErrorMessages.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND);
+
+        res.json(user.favoriteRestaurants);
+    }
+
+    addFavorite = async (req, res) => {
+        const restaurant = await Restaurant.findById(req.params.id);
+        if (!restaurant) {
+            throw new NotFoundException(ErrorMessages.RESTAURANT_NOT_FOUND, ErrorCodes.RESTAURANT_NOT_FOUND);
+        }
+
+        await User.findByIdAndUpdate(
+            req.user.id,
+            { $addToSet: { favoriteRestaurants: req.params.id } }
+        );
+
+        await Restaurant.findByIdAndUpdate(
+            req.params.id,
+            { $addToSet: { favoritedBy: req.user.id } }
+        );
+
+        res.status(HttpStatus.NO_CONTENT).send();
+    }
+
+    removeFavorite = async (req, res) => {
+        const restaurant = await Restaurant.findById(req.params.id);
+        if (!restaurant) {
+            throw new NotFoundException(ErrorMessages.RESTAURANT_NOT_FOUND, ErrorCodes.RESTAURANT_NOT_FOUND);
+        }
+
+        await User.findByIdAndUpdate(
+            req.user.id,
+            { $pull: { favoriteRestaurants: req.params.id } }
+        );
+
+        await Restaurant.findByIdAndUpdate(
+            req.params.id,
+            { $pull: { favoritedBy: req.user.id } }
+        );
+
+        res.status(HttpStatus.NO_CONTENT).send();
+    }
+
 
 }
 

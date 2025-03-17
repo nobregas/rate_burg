@@ -21,4 +21,11 @@ restaurantRouter.delete("/:id",[authMiddleware, roleMiddleware(Roles.ADMIN)],
     errorHandler(RestaurantController.delete)
 );
 
+restaurantRouter.get("/favorites", authMiddleware, errorHandler(RestaurantController.getFavorites))
+
+restaurantRouter.post("/:id/favorite", authMiddleware, errorHandler(RestaurantController.addFavorite));
+
+restaurantRouter.delete("/:id/favorite", authMiddleware, errorHandler(RestaurantController.removeFavorite));
+
+
 export default restaurantRouter;

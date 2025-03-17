@@ -12,6 +12,10 @@ const RestaurantSchema = new mongoose.Schema({
     ratings: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Rating'
+    }],
+    favoritedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }]
 })
 
